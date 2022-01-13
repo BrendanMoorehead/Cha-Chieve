@@ -8,20 +8,23 @@ const rewardInput = document.querySelector(".reward-input");
 const costInput = document.querySelector(".cost-input");
 const rewardButton = document.querySelector(".reward-button");
 const rewardList = document.querySelector(".reward-list");
-
-const coinCount = document.querySelector(".coin-counter");
-const speed = 100;
+const popup = document.querySelector(".popup-wrapper");
+const popupText = document.querySelector(".popup-text");
+const popupButton = document.querySelector(".x-button");
 //Event Listeners
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
 rewardList.addEventListener('click', deleteCheck);
 rewardButton.addEventListener('click', addReward);
+popupButton.addEventListener('click', deleteCheck);
 //Functions
 function addTodo(event){
   //Prevent form from submitting
   event.preventDefault();
 
   if (todoInput.value == "" || valueInput.value == ""){
+    document.getElementById("popup-text").innerText = "PLEASE FILL OUT ALL FIELDS";
+    document.getElementById("popup-wrapper").style.opacity = 1;
     console.log("Empty field - goals");
     return;
   }
@@ -36,6 +39,8 @@ function addTodo(event){
   //Value
   const todoVal = document.createElement('p');
   if (parseInt(valueInput.value) <= 0){
+    document.getElementById("popup-text").innerText = "VALUE MUST BE A POSITIVE NUMBER";
+    document.getElementById("popup-wrapper").style.opacity = 1;
     console.log("goal val must be > 0");
     valueInput.value = '';
     return;
@@ -64,6 +69,8 @@ function addReward(event){
   event.preventDefault();
 
   if (rewardInput.value == "" || costInput.value == ""){
+    document.getElementById("popup-text").innerText = "PLEASE FILL OUT ALL FIELDS";
+    document.getElementById("popup-wrapper").style.opacity = 1;
     console.log("Empty field - rewards");
     return;
   }
@@ -78,6 +85,8 @@ function addReward(event){
   //Value
   const rewardVal = document.createElement('p');
   if (parseInt(costInput.value) <= 0){
+    document.getElementById("popup-text").innerText = "COST MUST BE A POSITIVE NUMBER";
+    document.getElementById("popup-wrapper").style.opacity = 1;
     console.log("reward cost must be > 0");
     costInput.value = '';
     return;
@@ -116,8 +125,10 @@ function deleteCheck(event){
     const currVal =  parseInt(document.getElementById("coin-counter").innerHTML);
     const addVal = parseInt(todo.children[1].innerHTML);
     const newVal = currVal + addVal;
-
+    document.getElementById("popup-text").innerText = "TASK COMPLETED: " + todo.children[0].innerHTML;
+    document.getElementById("popup-wrapper").style.opacity = 1;
     document.getElementById("coin-counter").innerHTML = newVal;
+    todo.remove();
   }
     if (item.classList[0] === "purchase-btn"){
       const reward = item.parentElement;
@@ -126,9 +137,16 @@ function deleteCheck(event){
       const newVal = currVal - addVal;
       if (newVal < 0)
       {
+        document.getElementById("popup-text").innerText = "YOU DONT HAVE ENOUGH COINS FOR THIS REWARD";
+        document.getElementById("popup-wrapper").style.opacity = 1;
         console.log("Cannot go negative");
         return;
       }
+      document.getElementById("popup-text").innerText = "BUYING REWARD: " + reward.children[0].innerHTML;
+      document.getElementById("popup-wrapper").style.opacity = 1;
       document.getElementById("coin-counter").innerHTML = newVal;
     }
+      if (item.classList[0] === "x-button"){
+        document.getElementById("popup-wrapper").style.opacity = 0;
+      }
 }
